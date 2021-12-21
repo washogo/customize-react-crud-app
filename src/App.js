@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
-  console.log("start");
   const [todo, setTodo] = useState("");
   const [todos, setTodos] = useState([]);
 
@@ -15,10 +14,18 @@ const App = () => {
     e.preventDefault();
     
     if (todo !== "") {
-      setTodos([...todos, todo])
+      setTodos([...todos, {
+        id: todos.length + 1,
+        text: todo
+      }])
     };
     
     setTodo("");
+  }
+
+  const onClickDeleteTodo = (id) => {
+    const removeTodo = todos.filter(todo => todo.id !== id);
+    setTodos(removeTodo);
   }
 
   return (
@@ -37,16 +44,20 @@ const App = () => {
           />
           <button className="btn btn-primary" onClick={onClickAddTodo}>Add Todo</button>
       </form>
-      <table className="table table-dark table-striped">
+      <table className="table table-dark">
         <thead>
           <tr>
+            <th>ID</th>
             <th>Todo</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {todos.map((todo, index) => (
             <tr key={index}>
-              <td>{todo}</td>
+              <td>{todo.id}</td>
+              <td>{todo.text}</td>
+              <td><button type="button" className="btn btn-danger" onClick={() => onClickDeleteTodo(todo.id)}>Delete Todo</button></td>
             </tr>
           ))}
         </tbody>
