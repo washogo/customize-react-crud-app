@@ -1,10 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const App = () => {
   const [todo, setTodo] = useState("");
-  const [todos, setTodos] = useState([]);
+  const [todos, setTodos] = useState(() => {
+    const result = localStorage.getItem("todos");
+    if (result) {
+      return JSON.parse(result)
+    } else {
+      return []
+    }
+  });
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+  }, [todos])
 
   const onChangeForm = (e) => {
     setTodo(e.target.value)
